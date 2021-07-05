@@ -17,6 +17,9 @@ class Server{
         this.routes();
     }
     middlewares(){
+
+        //Lectura y parseo del body
+        this.app.use(express.json());
         
         //Cors
         this.app.use(cors());

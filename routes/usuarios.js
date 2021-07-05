@@ -7,7 +7,7 @@ const router = Router();
 
 router.get('/', usuariosGet );
 //PUT
-router.put('/',  usuariosPut);
+router.put('/:id',  usuariosPut);
 //Post
 router.post('/',  usuariosPost);
 //Delete
