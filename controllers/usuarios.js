@@ -1,7 +1,6 @@
 const {response, request} = require('express');
 const Usuario = require('../models/usuario');
 const bcryptjs = require('bcryptjs');
-const { query } = require('express-validator');
 
 const usuariosGet = async(req = request, res = response) => {
     
@@ -12,9 +11,10 @@ const usuariosGet = async(req = request, res = response) => {
     //     .limit(Number(limite));
 
     // const total = await Usuario.countDocuments(query);
+    const query = {estado : true};
     const [total, usuarios] = await Promise.all([
         Usuario.countDocuments(query),
-        Usuario.find()
+        Usuario.find(query)
             .skip(Number(desde))
             .limit(Number(limite))
     ]);
@@ -50,10 +50,12 @@ const usuariosPost = async(req, res = response) => {
     });
 }
 
-const usuariosDelete = (req, res = response) => {
+const usuariosDelete = async(req, res = response) => {
     const {id} = req.params;
+
+    const usuario = await Usuario.findByIdAndUpdate(id, {estado: false}, {new: true});
     res.json({
-        id
+        usuario
     });
 }
 
