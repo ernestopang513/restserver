@@ -4,36 +4,50 @@ const bcryptjs = require('bcryptjs');
 
 const usuariosGet = async(req = request, res = response) => {
     
-    // const {edad,page} = req.query;
-    const {desde =  0,limite = 5} = req.query;
-    // const usuarios = await Usuario.find()
-    //     .skip(Number(desde))
-    //     .limit(Number(limite));
-
-    // const total = await Usuario.countDocuments(query);
-    const query = {estado : true};
-    const [total, usuarios] = await Promise.all([
-        Usuario.countDocuments(query),
-        Usuario.find(query)
+    try {
+        // const {edad,page} = req.query;
+        const {desde =  0,limite = 5} = req.query;
+        // const usuarios = await Usuario.find()
+        //     .skip(Number(desde))
+        //     .limit(Number(limite));
+        
+        // const total = await Usuario.countDocuments(query);
+        const query = {estado : true};
+        const [total, usuarios] = await Promise.all([
+            Usuario.countDocuments(query),
+            Usuario.find(query)
             .skip(Number(desde))
             .limit(Number(limite))
-    ]);
-    res.json({
-        total,
-        usuarios
-    });
+        ]);
+        res.json({
+            total,
+            usuarios
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            msg: 'internal server error'
+        });
+    }
 }
 
 const usuariosPut = async(req, res = response) => {
     
-    const {id} = req.params;
-    const {_id,password, google,correo,...resto} = req.body;
-    if(password){
-        const salt = bcryptjs.genSaltSync();
-        resto.password = bcryptjs.hashSync(password,salt);
+    try {
+        const {id} = req.params;
+        const {_id,password, google,correo,...resto} = req.body;
+        if(password){
+            const salt = bcryptjs.genSaltSync();
+            resto.password = bcryptjs.hashSync(password,salt);
+        }
+        const usuario = await Usuario.findByIdAndUpdate(id, resto,{new: true});
+        return res.json(usuario);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            msg: 'Error de servidor'
+        });
     }
-    const usuario = await Usuario.findByIdAndUpdate(id, resto,{new: true});
-    res.json(usuario);
 }
 
 const usuariosPost = async(req, res = response) => {
