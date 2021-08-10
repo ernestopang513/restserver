@@ -29,7 +29,8 @@ router.post('/', [
 //Actualizar - privado - cualquiera con token valido
 router.put('/:id', [
     validarJWT,
-    check('id', 'No es un MongoId').isMongoId(),
+    check('id', 'No es un mongo id').isMongoId(),
+    check('id').custom(existeCategoria),
     check('nombre', 'El nombre es oblicagorio').notEmpty(),
     check('nombre', 'Palabras de 3 a 15 caracteres').isLength({min: 3, max: 15}),
     validarCampos
@@ -38,6 +39,9 @@ router.put('/:id', [
 router.delete('/:id', [
     validarJWT,
     adminRole,
+    check('id', 'No es un mongo id').isMongoId(),
+    check('id').custom(existeCategoria),
+    validarCampos
 ] ,eliminarCategoria);
 
 

@@ -28,7 +28,7 @@ const existeID = async(id = '') => {
 const existeCategoria = async(id='') => {
     const categoriaExiste = await Categoria.findById(id);
     if(!categoriaExiste){
-        throw new Error(`Esta categoria no existe`);
+        throw new Error('Esta categoria no existe');
     };
 }
 

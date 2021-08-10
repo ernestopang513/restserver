@@ -109,10 +109,7 @@ const actualizatCategoria = async(req, res = response) => {
         }
         const categoria = await Categoria.findByIdAndUpdate(id, data, {new: true});
         return res.json({
-            id,
-            categoria,
-            usuario,
-            nombresDB
+            categoria
         })
     } catch (error) {
         console.log(error);
