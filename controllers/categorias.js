@@ -32,20 +32,17 @@ const obtenerCategorias = async(req = request, res = response) => {
 const obtenerCategoria  = async(req, res = response) => {
 
     try {
-        
         const {id} = req.params;
-        console.log(id)
-        const cat = await Categoria.findById(id)
+        const categoriaDB = await Categoria.findById(id)
         .populate('usuario');
 
-        if(!cat){
+        if(!categoriaDB){
             return res.status(404).json({
                 msg: 'No hay categoria con ese id'
             });
         }
         return res.json({
-            msg: `Si hay categoria con el nombre de ${id} y el creador fue el usuario: ${cat.usuario.nombre}`,
-            cat
+            cat: categoriaDB
         });
     } catch (error) {
         console.log(error);
