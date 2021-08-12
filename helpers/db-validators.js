@@ -12,14 +12,12 @@ const esRoleValido = async(rol = '') => {
 }
 
 const emailValido = async(correo = '') => {
-
     const emailExist = await Usuario.findOne({correo});
     if(emailExist){
         throw new Error(`El email: ${correo} ya está registrado`);
     }
 }
 const existeID = async(id = '') => {
-
     const idExist = await Usuario.findById(id);
     if(!idExist){
         throw new Error(`El id: ${id} no se logro encontrar`);
@@ -28,7 +26,7 @@ const existeID = async(id = '') => {
 const existeCategoria = async(id='') => {
     const categoriaExiste = await Categoria.findById(id);
     if(!categoriaExiste){
-        throw new Error('Esta categoria no existe');
+        throw new Error('Esta categoria no existe id sin encontrar');
     };
 }
 

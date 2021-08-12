@@ -34,13 +34,13 @@ const obtenerCategoria  = async(req, res = response) => {
     try {
         const {id} = req.params;
         const categoriaDB = await Categoria.findById(id)
-        .populate('usuario');
+        .populate('usuario', 'nombre');
 
-        if(!categoriaDB){
-            return res.status(404).json({
-                msg: 'No hay categoria con ese id'
-            });
-        }
+        // if(!categoriaDB){
+        //     return res.status(404).json({
+        //         msg: 'No hay categoria con ese id'
+        //     });
+        // }
         return res.json({
             cat: categoriaDB
         });
@@ -93,14 +93,17 @@ const actualizatCategoria = async(req, res = response) => {
 
     try {
         const {id} = req.params;
-        const nombre = req.body.nombre.toUpperCase();
-        const usuario = req.usuario._id;
-        if(!nombre){
-            return res.status(401).json({
-                msg: 'El nombre es obligatorio'
-            });
-        }
-        const data = {nombre, usuario };
+        // const nombre = req.body.nombre.toUpperCase();
+        // const usuario = req.usuario._id;
+        // if(!nombre){
+        //     return res.status(401).json({
+        //         msg: 'El nombre es obligatorio'
+        //     });
+        // }
+        // const data = {nombre, usuario };
+        const {estado, usuario, ...data} = req.body;
+        data.nombre = data.nombre.toUpperCase();
+        data.usuario = req.usuario._id;
         const nombresDB = await Categoria.findOne({nombre});
         if(nombresDB){
             return res.status(401).json({
@@ -122,11 +125,9 @@ const eliminarCategoria = async(req, res = response) => {
 
     try {
         const {id} = req.params;
-        const data = {estado: false};
-        const categoria = await Categoria.findByIdAndUpdate(id, data, {new: true});
+        const categoria = await Categoria.findByIdAndUpdate(id, {estado: false}, {new: true});
 
         return res.json({
-            id,
             categoria
         })
     } catch (error) {
