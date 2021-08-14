@@ -1,6 +1,6 @@
 const Usuario = require('../models/usuario');
 const Role = require('../models/role');
-const { Categoria } = require('../models');
+const { Categoria, Producto } = require('../models');
 
 
 
@@ -29,6 +29,20 @@ const existeCategoria = async(id='') => {
         throw new Error('Esta categoria no existe id sin encontrar');
     };
 }
+const existeProductoId = async(id='') => {
+    const categoriaExiste = await Producto.findById(id);
+    if(!categoriaExiste){
+        throw new Error('Este producto no existe id sin encontrar');
+    };
+}
+
+//Helper para verificación de nombre de productos no entran como middlewares de check funtion
+const existeProductoNombre = async(nombre = '' ) => {
+    const nombreDB = await Producto.findOne({nombre});
+        if(!!nombreDB){
+            throw new Error('El producto ingresado ya existe')
+        }
+}
 
 // // Verificar que el correo existe
 // const emailExist = await Usuario.findOne({correo});
@@ -43,5 +57,7 @@ module.exports = {
     esRoleValido,
     emailValido,
     existeID,
-    existeCategoria
+    existeCategoria,
+    existeProductoId,
+    existeProductoNombre
 }

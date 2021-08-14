@@ -1,4 +1,4 @@
-const {Router, response} = require('express');
+const {Router} = require('express');
 const { check } = require('express-validator');
 const { crearCategoria, obtenerCategorias, obtenerCategoria, actualizatCategoria, eliminarCategoria } = require('../controllers/categorias');
 const { existeCategoria } = require('../helpers/db-validators');
@@ -45,4 +45,4 @@ router.delete('/:id', [
 ] ,eliminarCategoria);
 
 
-module.exports = router
+module.exports = router;
