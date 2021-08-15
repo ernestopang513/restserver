@@ -59,13 +59,13 @@ const crearCategoria = async(req, res = response) => {
     
     try {
         const nombre = req.body.nombre.toUpperCase();
-        const  categoriaDB = await Categoria.findOne({nombre});
+        // const  categoriaDB = await Categoria.findOne({nombre});
         
-        if(categoriaDB){
-            return res.status(401).json({
-                msg: `Ya existe la categoria: ${nombre.toLowerCase()}`
-            });
-        }
+        // if(categoriaDB){
+        //     return res.status(401).json({
+        //         msg: `Ya existe la categoria: ${nombre.toLowerCase()}`
+        //     });
+        // }
         
         const data = {
             nombre,
@@ -83,7 +83,7 @@ const crearCategoria = async(req, res = response) => {
     } catch (error) {
         console.log(error)
         return res.status(500).json({
-            msg: 'mamo pero fue culpa de mongo o mongoose'
+            msg: 'Error en el servidor'
         });
     }
 };
@@ -104,12 +104,12 @@ const actualizatCategoria = async(req, res = response) => {
         const {estado, usuario, ...data} = req.body;
         data.nombre = data.nombre.toUpperCase();
         data.usuario = req.usuario._id;
-        const nombresDB = await Categoria.findOne({nombre});
-        if(nombresDB){
-            return res.status(401).json({
-                msg: 'Lo siento ese nombre ya esta en la Base de datos'
-            })
-        }
+        // const nombresDB = await Categoria.findOne({nombre});
+        // if(nombresDB){
+        //     return res.status(401).json({
+        //         msg: 'Lo siento ese nombre ya esta en la Base de datos'
+        //     })
+        // }
         const categoria = await Categoria.findByIdAndUpdate(id, data, {new: true});
         return res.json({
             categoria

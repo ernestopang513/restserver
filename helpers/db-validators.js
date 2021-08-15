@@ -36,11 +36,17 @@ const existeProductoId = async(id='') => {
     };
 }
 
-//Helper para verificación de nombre de productos no entran como middlewares de check funtion
+
 const existeProductoNombre = async(nombre = '' ) => {
     const nombreDB = await Producto.findOne({nombre});
         if(!!nombreDB){
-            throw new Error('El producto ingresado ya existe')
+            throw new Error('El producto ingresado ya existe');
+        }
+}
+const existeCategoriaNombre = async(nombre = '' ) => {
+    const nombreDB = await Categoria.findOne({nombre: nombre.toUpperCase()});
+        if(!!nombreDB){
+            throw new Error('La categoria ingresada ya existe');
         }
 }
 
@@ -59,5 +65,6 @@ module.exports = {
     existeID,
     existeCategoria,
     existeProductoId,
-    existeProductoNombre
+    existeProductoNombre,
+    existeCategoriaNombre
 }

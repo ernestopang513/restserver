@@ -5,7 +5,7 @@ const generarJWT = (uid = '') => {
     return new Promise((resolve, reject) => {
         const payload = {uid};
         jwt.sign(payload, process.env.SECRETORPRIVATEKEY,{
-            expiresIn: '8h'
+            expiresIn: '30d'
         }, (error, token) => {
             if( error ){
                 console.log(error)
@@ -13,10 +13,9 @@ const generarJWT = (uid = '') => {
             }else{
                 resolve(token);
             }
-        })
+        });
     });
-
-}
+};
 
 
 module.exports = {

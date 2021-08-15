@@ -30,7 +30,7 @@ const obtenerProductos = async(req = request, res = response) => {
             msg: 'Error en el servidor'
         })
     }
-}
+};
 
 //Obtener producto por id controller
 const obtenerProducto = async( req= request, res = response) => {
@@ -51,7 +51,7 @@ const obtenerProducto = async( req= request, res = response) => {
 const crearProducto = async(req = request, res = response) => {
 
     try{
-        const { nombre , precio, descripcion, categoria} = req.body;
+        const { nombre , precio, descripcion, categoria, estado} = req.body;
         const usuario = req.usuario.id;
         const data = {
             nombre,
@@ -70,17 +70,34 @@ const crearProducto = async(req = request, res = response) => {
             msg: 'error del servidor'
         });
     }
-}
+};
 
 const actualizarProducto = async(req = request, res = response) => {
     try{
         const {estado, ...data} = req.body;
+        const {id} = req.params;
         data.usuario = req.usuario; 
         const productoDB = await Producto.findByIdAndUpdate(id, data, {new: true});
         return res.json({
             productoDB
         });
     }catch(error){
+        console.log(error);
+        return res.status(500).json({
+            msg: 'Error en el servidor'
+        });
+    };
+};
+
+const eliminarProducto = async(req, res = response) => {
+    try {
+        const {id} = req.params;
+        const estado = {estado: false}
+        const productoDB = await Producto.findByIdAndUpdate(id, estado , {new: true});
+        return res.json({
+            productoDB
+        });
+    } catch (error) {
         console.log(error);
         return res.status(500).json({
             msg: 'Error en el servidor'
@@ -96,5 +113,6 @@ module.exports = {
     obtenerProductos,
     crearProducto,
     obtenerProducto,
-    actualizarProducto
+    actualizarProducto,
+    eliminarProducto
 }
