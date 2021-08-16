@@ -51,15 +51,8 @@ const obtenerProducto = async( req= request, res = response) => {
 const crearProducto = async(req = request, res = response) => {
 
     try{
-        const { nombre , precio, descripcion, categoria, estado} = req.body;
-        const usuario = req.usuario.id;
-        const data = {
-            nombre,
-            precio,
-            usuario,
-            descripcion,
-            categoria
-        };
+        const { estado, usuario, ...data} = req.body;
+        data.usuario = req.usuario.id;
         const producto = await new Producto(data);
         await producto.save();
         res.json(producto);
