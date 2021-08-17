@@ -1,7 +1,7 @@
 const { response } = require("express");
 
 const {ObjectId} = require('mongoose').Types;
-const Usuario  = require('../models/usuario');
+const {Categoria, Producto, Usuario} = require('../models');
 
 
 const coleccionesPermitidas = [
@@ -10,6 +10,7 @@ const coleccionesPermitidas = [
     'productos',
     'roles',
 ];
+
 const buscarUsuarios = async(termino='', res = response) => {
 
     const esMongoId = ObjectId.isValid(termino);
@@ -23,15 +24,51 @@ const buscarUsuarios = async(termino='', res = response) => {
     const regex = new RegExp(termino, 'i');
 
     const usuarios = await Usuario.find({
-        $or: [{nombre: regex}, {correo: regex}]
+        $or: [{nombre: regex}, {correo: regex}],
+        $and: [{estado: true}]
     });
 
     return res.json({
         results: usuarios
-    })
+    });
 }
 
+const buscarCategorias = async(termino, res = response) => {
 
+    const esMongoId = ObjectId.isValid(termino);
+
+    if(esMongoId){
+        const categoria = await Categoria.findById(termino);
+        return res.json({
+            results: (categoria) ? [categoria] : []
+        });
+    };
+
+    const regex = new RegExp(termino, 'i');
+
+    const categorias = await Categoria.find({nombre: regex, estado: true})
+    return res.json({
+        results: categorias
+    });
+}
+const buscarProductos = async(termino, res = response) => {
+
+    const esMongoId = ObjectId.isValid(termino);
+
+    if(esMongoId){
+        const producto = await Producto.findById(termino);
+        return res.json({
+            results: (producto) ? [producto] : []
+        });
+    };
+
+    const regex = new RegExp(termino, 'i');
+
+    const productos = await Producto.find({nombre: regex, estado: true})
+    return res.json({
+        results: productos
+    });
+}
 
 
 
@@ -49,10 +86,10 @@ const buscar = async(req, res = response) => {
             buscarUsuarios(termino, res);
             break;
         case 'categorias':
-            
+            buscarCategorias(termino, res);
             break;
-        case 'productos':
-            
+            case 'productos':
+            buscarProductos(termino, res);
             break;
     
         default:
@@ -61,7 +98,6 @@ const buscar = async(req, res = response) => {
             })
             break;
     }
-    
 }
 
 module.exports = {
