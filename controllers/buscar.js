@@ -95,7 +95,7 @@ const buscar = async(req, res = response) => {
         default:
             res.status(500).json({
                 msg: 'Se olvido esta busqueda'
-            })
+            });
             break;
     }
 }
